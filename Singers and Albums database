@@ -1,0 +1,96 @@
+CREATE TABLE singer (id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  age INTEGER,
+  nationality TEXT,
+  gender TEXT);
+  
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Rihanna", 35, "Barbadian","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Beyonce",41,"American","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Jay-Z",53,"American","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Megan thee stallion",28,"American","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Burnaboy",31,"Nigerian","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Rema",23, "Nigerian","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Justin Bieber",29,"Canadian","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Tiwa Savage",43,"Nigerian","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Davido",30,"Nigerian","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Arya Starr",20, "Nigerian","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Asake",28,"Nigerian","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Simi",35,"Nigerian","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Yemi Alade",34,"Nigerian","F");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Adekunle Gold",36,"Nigerian","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Stormzy",29,"British","M");
+INSERT INTO singer (name,age,nationality,gender) VALUES ("Ariana Grande",29,"Italian","F");
+
+
+CREATE TABLE album (id INTEGER PRIMARY KEY AUTOINCREMENT,
+   name_id INTEGER,
+   album_name TEXT,
+   release_year TEXT,
+   ratings INTEGER,
+   record_label TEXT);
+   
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (1,"Anti","28/01/2016",4,"Roc Nation");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (1,"Loud","16/10/2010",3,"Roc Nation");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (2,"Lemonade","23/04/2016",3,"Parkwood Columbia");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (2,"The Gift", "19/07/2019",5,"Parkwood Columbia");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (2, "4","24/06/2011",5,"Parkwood Columbia");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (3,"4:44", "30/06/2017",4,"Roc Nation");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (3, "Watch the throne", "08/08/2011",5,"Roc Nation");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (4,"Traumazine","12/08/2022",3,"501 certified");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (4,"Good News","20/11/2020",2,"501 certified");
+INSERT INTO album (name_id,album_name,release_year,ratings,record_label) VALUES (5,"African Giant","26/07/2019",4,"Spaceship Bad Habit Atlantic Warner Music");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (5,"Twice as tall","14/08/2020",5,"Spaceship Bad Habit Atlantic Warner Music");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (6,"Bad commando","27/09/2019",2,"Mavin Entertainment Records");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (7,"Purpose","13/11/2015",3,"Def Jam");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (7, "Changes","14/02/2020",4,"Def Jam");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (7, "My World","17/11/2019",4,"Def Jam");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (8,"Sugarcane","22/09/2017",2,"Mavin Entertainment Records");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (9,"Timeless","31/03/2023",5,"DMW");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (9,"The baddest","11/06/2020",1,"DMW");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (11,"Mr Money with the vibe","07/09/2022",4,"YBNL-Empire");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (12, "Simisola","08/09/2017",2,"Studio brat");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (15,"Heavy is the head","13/12/2019",4,"#merky atlantic records");
+INSERT INTO album(name_id,album_name,release_year,ratings,record_label) VALUES (16,"The best","27/09/2017",2,"Republic records");
+
+
+CREATE TABLE couples (id INTEGER PRIMARY KEY AUTOINCREMENT,
+     couples1_id INTEGER,
+     couples2_id INTEGER);
+     
+INSERT INTO couples (couples1_id,couples2_id) VALUES (2,3);
+INSERT INTO couples (couples1_id,couples2_id) VAlUES (12,14);
+   
+   
+/*match all singers with their albums*/
+SElECT singer.name, album.album_name FROM singer
+ LEFT OUTER JOIN album
+  ON singer.id=album.name_id;
+  
+/*show the singers from nigeria and that are signed to a record label*/
+SELECT singer.name,album.record_label FROM singer 
+ JOIN album
+ ON singer.id=album.name_id
+ WHERE singer.nationality = "Nigerian"
+ GROUP BY singer.name;
+
+/*show female singers with albums released in 2016 */
+SELECT singer.name,album.album_name,album.release_year FROM singer
+  JOIN album 
+  ON singer.id=album.name_id
+  WHERE singer.gender="F" AND album.release_year LIKE "%2016%";
+  
+/*show average album ratings of singers in America*/
+SELECT singer.name ,avg(album.ratings) AS avg_ratings FROM singer
+  JOIN album 
+  ON singer.id=album.name_id
+  GROUP BY singer.name
+  HAVING singer.nationality="American";
+  
+  
+/*show names of married couples*/
+SELECT a.name as female_singers,b.name as male_singers FROM couples 
+  JOIN singer a
+  ON couples.couples1_id=a.id
+  JOIN singer b
+  ON couples.couples2_id=b.id;
+  
