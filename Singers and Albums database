@@ -1,3 +1,5 @@
+#An SQL with multiple tables in it, I'm querying the database to show the statistics of singers and their albums.
+
 CREATE TABLE singer (id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT,
   age INTEGER,
