@@ -1,3 +1,5 @@
+# In this SQL, I'm querying a database with multiple tables in it to show various statistics about card games and players.
+
 CREATE TABLE card_games(id INTEGER PRIMARY KEY AUTOINCREMENT,
     date_played TEXT,
     game_name TEXT,
