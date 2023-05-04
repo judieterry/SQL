@@ -46,5 +46,10 @@ SELECT count(customers.acctnum), avg(quantity*price) FROM customers
  AND length(order_id)=6
  AND order_id <> 'ORDER ID';
 
-
+#8. List all the products sold in Los Angeles in February, and include how many of each were sold.
+SELECT product,sum(quantity) FROM Febsales
+ WHERE location like '%los Angeles%'
+ AND length(orderid)=6
+ AND orderid<> 'ORDER ID'
+ GROUP BY product
 
