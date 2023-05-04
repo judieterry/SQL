@@ -1,35 +1,44 @@
-SELECT count(*) FROM JanSales
+#An SQL of multiple tables, below I'm quering the database to quantify statistics about customer and order data.
+
+#1. How many orders were placed in January?
+SELECT count(*) FROM JanSales  
  WHERE length(orderID)=6
  AND orderID<> 'ORDER ID';
- 
+
+#2. How many of the orders in January were for iphones?
 SELECT count(*) FROM JanSales
  WHERE length(orderID)=6
  AND orderID<> 'ORDER ID'
  AND Product = 'iPhone';
- 
+
+#3. Show the customer account numbers for all the orders that were placed in February?
 SELECT customers.acctnum FROM customers
  JOIN FebSales
  ON customers.order_id = FebSales.OrderID
  WHERE length(orderID)=6
  AND orderID<> 'ORDER ID';
 
+#4. Which product was the cheapest one sold in January and what was the price?
 SELECT product,min(price) FROM JanSales
  WHERE length(orderID)=6
  AND orderID<> 'ORDER ID'
  GROUP BY product,price
  ORDER BY price asc LIMIT 1 ;
  
+ #5.what is the total revenue of each product sold in January?
 SELECT sum(quantity)*price revenue,product FROM JanSales
  WHERE length(orderID)=6
  AND orderID<> 'ORDER ID'
  GROUP BY product;
  
+ #6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold and what was the total revenue?
 SELECT product, sum(quantity), sum(quantity)*price revenue FROM febsales 
  WHERE location = '548 Lincoln St, Seattle, WA 98101'
  AND length(orderID)=6
  AND orderID<> 'ORDER ID'
  GROUP BY product;
  
+ #7. How many customers ordered more than 2 products at a time and what was the average amount spent for those customers?
 SELECT count(customers.acctnum), avg(quantity*price) FROM customers 
  LEFT JOIN FebSales 
  ON customers.order_id=FebSales.orderID 
