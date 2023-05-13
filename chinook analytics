@@ -1,0 +1,88 @@
+#I DOWNLOADED THE DATASET CALLED CHINOOK WHICH REPRESENTS A DIGITAL MEDIA STORE.
+#THE DATASET INCLUDES TABLES FOR ARTISTS,ALBUMS,MEDIA TRACKS,INVOICES AND CUSTOMERS.
+#BELOW ARE SOME OF THE ANSWERED QUESTIONS FROM THE SAID DATASET.
+
+#1.SHOW CUSTOMERS WHO ARE NOT FROM USA.
+SELECT customerid,firstname,lastname,country
+ FROM chinook.customers
+ WHERE country <>'USA';
+ 
+ #2.SHOW ALL CUSTOMERS FROM BRAZIL.
+SELECT * FROM chinook.customers
+ WHERE country= 'Brazil';
+ 
+ #3.SHOW EMPLOYEES WHO ARE SALES AGENTS.
+SELECT employeeid,firstname,lastname
+ FROM chinook.employees 
+ WHERE title = 'Sales Support Agent';
+ 
+ #4.SHOW INVOICES OF CUSTOMERS FROM BRAZIL.
+SELECT cust.firstname,cust.lastname,inv.invoiceid,inv.invoiceid,inv.billingcountry
+ FROM chinook.invoices as inv
+ LEFT JOIN chinook.customers as cust
+ ON inv.customerid=cust.customerid
+ WHERE cust.country= 'Brazil';
+ 
+ #5.SHOW LIST OF BILLING COUNTRIES FROM THE INVOICE TABLE.
+SELECT DISTINCT billingcountry FROM chinook.invoices;
+
+#6.SHOW INVOICES ASSOCIATED WITH EACH SALES AGENT.
+SELECT emp.firstname, emp.lastname,inv.invoiceid 
+ FROM chinook.employees as emp
+ JOIN chinook.customers as cust ON cust.supportrepid=emp.employeeid
+ JOIN chinook.invoices as inv ON inv.customerid=cust.customerid;
+
+#7.SHOW INVOICE TOTAL,CUSTOMER NAME,COUNTRY AND SALES AGENT FOR ALL INVOICES AND CUSTOMERS.
+SELECT inv.total,cust.firstname as "cust.firstname",cust.lastname as "cust.lastname",emp.firstname,emp.lastname,cust.country
+ FROM chinook.employees as emp
+ JOIN chinook.customers as cust ON cust.supportrepid=emp.employeeid
+ JOIN chinook.invoices as inv ON inv.customerid=cust.customerid;
+ 
+#8.SHOW HOW MANY INVOICES WERE THERE IN 2009. 
+SELECT count(*)
+ FROM chinook.invoices
+ WHERE invoicedate BETWEEN '2009-01-01' AND '2009-12-31';
+
+#9.SHOW THE TOTAL SALES OF 2009.
+SELECT SUM(total)
+ FROM chinook.invoices
+ WHERE invoicedate BETWEEN '2009-01-01' AND '2009-12-31';
+ 
+#10.SHOW PURCHASED TRACK NAME WITH EACH INVOICE LINE ID.
+SELECT t.name, i.invoicelineid
+ FROM chinook.invoice_items i
+ JOIN chinook.tracks t ON t.trackid=i.trackid;
+ 
+#11.SHOW TRACKS, ALBUM NAME, MEDIA TYPE AND GENRE.
+SELECT t.name AS 'Track name',a.title AS 'Album Title' ,m.name AS 'Media Type',g.name AS 'Genre'
+ FROM chinook.tracks t
+ JOIN chinook.albums a ON a.albumid=t.albumid
+ JOIN chinook.media_types m ON m.mediatypeid=t.mediatypeid
+ JOIN chinook.genres g ON g.genreid=t.genreid;
+ 
+#12.SHOW TOTAL SALES MADE BY EACH SALES AGENT.
+SELECT ROUND(sum(inv.total),1) AS 'Total Sales', emp.firstname,emp.lastname 
+ FROM chinook.employees as emp
+ JOIN chinook.customers as cust ON cust.supportrepid=emp.employeeid
+ JOIN chinook.invoices as inv ON inv.customerid=cust.customerid
+ GROUP BY emp.firstname, emp.lastname;
+ 
+#13.SHOW WHICH SALES AGENT MADE THE MOST MONEY IN SALES IN 2009.
+SELECT emp.firstname,emp.lastname, sum(inv.total)
+ FROM chinook.employees as emp
+ JOIN chinook.customers as cust ON cust.supportrepid=emp.employeeid
+ JOIN chinook.invoices as inv ON inv.customerid=cust.customerid
+ WHERE inv.invoicedate BETWEEN '2009-01-01' AND '2009-12-31'
+ GROUP BY emp.firstname, emp.lastname
+ ORDER BY sum(inv.total) desc
+ LIMIT 1;
+
+#14.SHOW PURCHASE TRACK NAME AND ARTIST NAME WITH EACH INVOICE LINE ID.
+SELECT ar.name as Artist, t.Name as Track, i.InvoiceLineId
+FROM chinook.Invoice_items i
+LEFT JOIN chinook.tracks t 
+ON i.TrackID=t.TrackID
+INNER JOIN chinook.albums a
+ON a.AlbumID=t.AlbumID
+LEFT JOIN chinook.artists ar
+ON ar.ArtistID=a.ArtistID;
